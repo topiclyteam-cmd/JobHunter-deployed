@@ -18,7 +18,7 @@ import asyncio
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="JobRadar")
+app = FastAPI(title="JobHunter")
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 

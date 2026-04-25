@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Session Management
-    let sessionId = localStorage.getItem('jobradar_session_id');
+    let sessionId = localStorage.getItem('jobhunter_session_id');
     if (!sessionId) {
         sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('jobradar_session_id', sessionId);
+        localStorage.setItem('jobhunter_session_id', sessionId);
     }
 
     // Navigation Tabs
