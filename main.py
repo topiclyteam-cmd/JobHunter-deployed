@@ -67,9 +67,9 @@ async def upload_cv(
         
     except Exception as e:
         traceback.print_exc()
-        if 'groq' in str(e).lower() or 'api' in str(e).lower() or 'json' in str(type(e).__name__).lower():
-             raise HTTPException(status_code=500, detail="Failed to parse CV with AI. Please check your API key and try again.")
-        raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
+        if 'groq' in str(e).lower() or 'api' in str(e).lower() or 'auth' in str(e).lower() or '401' in str(e):
+             raise HTTPException(status_code=401, detail="Invalid or missing Groq API Key. Please click the gear icon (Settings) to add your valid API key.")
+        raise HTTPException(status_code=500, detail=f"AI parsing failed. Please try again or check the format of your CV. Detail: {str(e)}")
 
 @app.post("/api/fetch-jobs")
 async def fetch_jobs(
@@ -113,7 +113,9 @@ async def fetch_jobs(
         return {"success": True, "jobs": db_jobs}
     except Exception as e:
         traceback.print_exc()
-        raise HTTPException(status_code=500, detail=f"Failed to fetch jobs: {str(e)}")
+        if '403' in str(e) or 'api' in str(e).lower() or 'forbidden' in str(e).lower() or 'unauthorized' in str(e).lower():
+            raise HTTPException(status_code=403, detail="Invalid or missing RapidAPI Key. Please click the gear icon (Settings) to add your valid key.")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch jobs from LinkedIn. Please try another search. Detail: {str(e)}")
 
 @app.post("/api/score-jobs")
 async def score_jobs(
@@ -147,7 +149,9 @@ async def score_jobs(
         
     except Exception as e:
         traceback.print_exc()
-        raise HTTPException(status_code=500, detail=f"Failed to score jobs: {str(e)}")
+        if 'groq' in str(e).lower() or 'api' in str(e).lower() or 'auth' in str(e).lower() or '401' in str(e):
+             raise HTTPException(status_code=401, detail="Invalid or missing Groq API Key. Please click the gear icon (Settings) to add your valid API key.")
+        raise HTTPException(status_code=500, detail=f"Failed to score jobs. Detail: {str(e)}")
 
 from pydantic import BaseModel
 from typing import Optional

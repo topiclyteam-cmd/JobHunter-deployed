@@ -806,3 +806,132 @@ body {
     text-align: center;
     white-space: nowrap;
 }
+
+/* Wordmark Styles */
+.wordmark {
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+.wordmark-job {
+    font-weight: 800;
+    color: var(--accent-green);
+}
+
+.nav-icon-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-icon-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.2s;
+}
+
+.modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-content {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    transform: translateY(0);
+    transition: transform 0.2s;
+}
+
+.modal-overlay.hidden .modal-content {
+    transform: translateY(-20px);
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.2rem;
+    border-radius: 4px;
+    transition: color 0.2s, background-color 0.2s;
+}
+
+.icon-btn:hover {
+    color: var(--text-primary);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.modal-footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.success-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--accent-green);
+    background-color: rgba(16, 185, 129, 0.1);
+    padding: 0.8rem;
+    border-radius: 8px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}

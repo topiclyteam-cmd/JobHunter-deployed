@@ -172,6 +172,11 @@ document.addEventListener('DOMContentLoaded', () => {
             showJobError("Please enter both a job title and a location.");
             return;
         }
+        
+        if (profileResult.classList.contains('hidden')) {
+            showJobError("Please upload and process your CV first on the Upload CV tab to enable AI matching.");
+            return;
+        }
 
         const formData = new FormData();
         formData.append('session_id', sessionId);
@@ -527,6 +532,57 @@ document.addEventListener('DOMContentLoaded', () => {
             
             document.getElementById(`val-${stage}`).textContent = count;
             document.getElementById(`bar-${stage}`).style.height = count > 0 ? `${Math.max(heightPercent, 10)}%` : '5%';
+        });
+    }
+
+    // --- Settings Modal Logic ---
+    const settingsBtn = document.getElementById('settings-btn');
+    const settingsModal = document.getElementById('settings-modal');
+    const closeSettingsBtn = document.getElementById('close-settings-btn');
+    const saveSettingsBtn = document.getElementById('save-settings-btn');
+    const settingsSuccess = document.getElementById('settings-success');
+    const settingsError = document.getElementById('settings-error');
+    const settingsErrorText = document.getElementById('settings-error-text');
+
+    if (settingsBtn) {
+        settingsBtn.addEventListener('click', () => {
+            settingsModal.classList.remove('hidden');
+            settingsSuccess.classList.add('hidden');
+            settingsError.classList.add('hidden');
+        });
+
+        closeSettingsBtn.addEventListener('click', () => {
+            settingsModal.classList.add('hidden');
+        });
+
+        saveSettingsBtn.addEventListener('click', async () => {
+            const groqKey = document.getElementById('groq-api-key').value.trim();
+            const rapidapiKey = document.getElementById('rapidapi-key').value.trim();
+            
+            settingsSuccess.classList.add('hidden');
+            settingsError.classList.add('hidden');
+            
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        groq_api_key: groqKey,
+                        rapidapi_key: rapidapiKey
+                    })
+                });
+                
+                const data = await response.json();
+                if (response.ok && data.success) {
+                    settingsSuccess.classList.remove('hidden');
+                    setTimeout(() => settingsModal.classList.add('hidden'), 1500);
+                } else {
+                    throw new Error(data.detail || "Failed to save settings.");
+                }
+            } catch (e) {
+                settingsErrorText.textContent = e.message;
+                settingsError.classList.remove('hidden');
+            }
         });
     }
 });
