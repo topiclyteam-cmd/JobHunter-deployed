@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobRadar</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            JobRadar
+        </div>
+        <ul class="nav-links">
+            <li><button class="nav-btn active" data-tab="upload-cv">Upload CV</button></li>
+            <li><button class="nav-btn" data-tab="job-feed">Job Feed</button></li>
+            <li><button class="nav-btn" data-tab="tracker">Tracker</button></li>
+            <li><button class="nav-btn" data-tab="dashboard">Dashboard</button></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <!-- Upload CV Tab -->
+        <section id="upload-cv" class="tab-content active">
+            <div class="header-section">
+                <h1>Analyze Your Profile</h1>
+                <p>Upload your CV in PDF format to instantly extract your professional profile using advanced AI.</p>
+            </div>
+
+            <div class="upload-container">
+                <div id="drop-zone" class="drop-zone">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    <p>Drag and drop your PDF CV here</p>
+                    <span>or</span>
+                    <label for="cv-upload" class="upload-btn">Browse Files</label>
+                    <input type="file" id="cv-upload" accept=".pdf" hidden>
+                </div>
+                <div id="file-name-display" class="file-name-display hidden"></div>
+                <button id="submit-cv-btn" class="submit-btn hidden">Process CV</button>
+            </div>
+
+            <div id="loading-spinner" class="loading-container hidden">
+                <div class="spinner"></div>
+                <p>Extracting profile with AI... This may take a moment.</p>
+            </div>
+
+            <div id="error-message" class="error-message hidden">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span id="error-text"></span>
+            </div>
+
+            <div id="profile-result" class="profile-card hidden">
+                <div class="profile-header">
+                    <h2 id="res-name">John Doe</h2>
+                    <span id="res-title" class="job-title-badge">Software Engineer</span>
+                </div>
+                
+                <div class="profile-body">
+                    <div class="info-group">
+                        <h3>Professional Summary</h3>
+                        <p id="res-summary"></p>
+                    </div>
+                    
+                    <div class="info-group">
+                        <h3>Experience</h3>
+                        <p><span id="res-experience" class="highlight-number"></span> Years</p>
+                    </div>
+                    
+                    <div class="info-group">
+                        <h3>Technical Skills</h3>
+                        <div id="res-skills" class="skills-container">
+                            <!-- Skills injected here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Job Feed Tab -->
+        <section id="job-feed" class="tab-content">
+            <div class="header-section">
+                <h1>Job Feed</h1>
+                <p>Search for real-time job listings tailored to your skills.</p>
+            </div>
+            
+            <div class="search-bar-container">
+                <input type="text" id="job-title-input" class="search-input" placeholder="e.g. Software Engineer">
+                <input type="text" id="location-input" class="search-input" placeholder="e.g. London, UK">
+                <button id="fetch-jobs-btn" class="search-btn">Fetch Jobs</button>
+            </div>
+
+            <div id="job-feed-error" class="error-message hidden">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span id="job-feed-error-text"></span>
+            </div>
+
+            <div id="job-feed-loading" class="loading-container hidden">
+                <div class="spinner"></div>
+                <p>Searching for jobs... This may take a moment.</p>
+            </div>
+
+            <div id="job-feed-container" class="job-list-container">
+                <!-- Job cards injected here -->
+            </div>
+            
+            <div id="job-feed-empty" class="empty-state">
+                <div class="amber-indicator"></div>
+                <p>Enter a job title and location to fetch jobs.</p>
+            </div>
+        </section>
+
+        <!-- Tracker Tab -->
+        <section id="tracker" class="tab-content">
+            <div class="header-section">
+                <h1>Application Tracker</h1>
+                <p>Drag and drop cards to update their status.</p>
+            </div>
+            
+            <div class="kanban-board" id="kanban-board">
+                <!-- Saved Column -->
+                <div class="kanban-column" data-status="Saved">
+                    <div class="kanban-header">
+                        <div class="kanban-title">Saved</div>
+                        <div class="kanban-count">0</div>
+                    </div>
+                    <div class="kanban-cards"></div>
+                </div>
+                
+                <!-- Applied Column -->
+                <div class="kanban-column" data-status="Applied">
+                    <div class="kanban-header">
+                        <div class="kanban-title">Applied</div>
+                        <div class="kanban-count">0</div>
+                    </div>
+                    <div class="kanban-cards"></div>
+                </div>
+                
+                <!-- Screening Column -->
+                <div class="kanban-column" data-status="Screening">
+                    <div class="kanban-header">
+                        <div class="kanban-title">Screening</div>
+                        <div class="kanban-count">0</div>
+                    </div>
+                    <div class="kanban-cards"></div>
+                </div>
+                
+                <!-- Technical Interview Column -->
+                <div class="kanban-column" data-status="Technical Interview">
+                    <div class="kanban-header">
+                        <div class="kanban-title">Technical Interview</div>
+                        <div class="kanban-count">0</div>
+                    </div>
+                    <div class="kanban-cards"></div>
+                </div>
+                
+                <!-- Offer Column -->
+                <div class="kanban-column" data-status="Offer">
+                    <div class="kanban-header">
+                        <div class="kanban-title">Offer</div>
+                        <div class="kanban-count">0</div>
+                    </div>
+                    <div class="kanban-cards"></div>
+                </div>
+                
+                <!-- Rejected Column -->
+                <div class="kanban-column" data-status="Rejected">
+                    <div class="kanban-header">
+                        <div class="kanban-title">Rejected</div>
+                        <div class="kanban-count">0</div>
+                    </div>
+                    <div class="kanban-cards"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Tab -->
+        <section id="dashboard" class="tab-content">
+            <div class="header-section">
+                <h1>Dashboard</h1>
+                <p>Overview of your job search progress based on your Kanban pipeline.</p>
+            </div>
+            
+            <div class="dashboard-grid">
+                <!-- Stat Cards -->
+                <div class="stat-card">
+                    <div class="stat-title">Total Applications</div>
+                    <div class="stat-value" id="stat-total-apps">0</div>
+                    <div class="stat-desc">Jobs actively tracking</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title">Response Rate</div>
+                    <div class="stat-value" id="stat-response-rate">0%</div>
+                    <div class="stat-desc">Beyond 'Applied' phase</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title">Avg. Match Score</div>
+                    <div class="stat-value" id="stat-avg-score">0%</div>
+                    <div class="stat-desc">Across all applications</div>
+                </div>
+            </div>
+            
+            <!-- Funnel Chart -->
+            <div class="chart-container">
+                <h2>Funnel Drop-off</h2>
+                <div class="css-bar-chart">
+                    <div class="chart-column">
+                        <div class="chart-bar bar-green" id="bar-applied" style="height: 0%;">
+                            <span class="bar-value" id="val-applied">0</span>
+                        </div>
+                        <div class="chart-label">Applied</div>
+                    </div>
+                    
+                    <div class="chart-column">
+                        <div class="chart-bar bar-amber" id="bar-screening" style="height: 0%;">
+                            <span class="bar-value" id="val-screening">0</span>
+                        </div>
+                        <div class="chart-label">Screening</div>
+                    </div>
+                    
+                    <div class="chart-column">
+                        <div class="chart-bar bar-amber" id="bar-technical" style="height: 0%;">
+                            <span class="bar-value" id="val-technical">0</span>
+                        </div>
+                        <div class="chart-label">Technical</div>
+                    </div>
+                    
+                    <div class="chart-column">
+                        <div class="chart-bar bar-green" id="bar-offer" style="height: 0%;">
+                            <span class="bar-value" id="val-offer">0</span>
+                        </div>
+                        <div class="chart-label">Offer</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
